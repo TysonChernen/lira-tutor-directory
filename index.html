@@ -4,14 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lira • Tutor Directory Sign-Up</title>
-  <!-- Tailwind CDN -->
+  <!-- Tailwind (CDN ok for now; warning is safe to ignore in a quick launch) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    html, body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    html, body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; }
   </style>
 </head>
 <body class="min-h-screen bg-neutral-950 text-neutral-100">
@@ -140,43 +140,45 @@
     <p class="mt-6 text-xs text-neutral-400">This page is independent from the main app. You can embed or link it later.</p>
   </main>
 
-  <!-- One clean module script: loads Supabase correctly, handles UI, and logs errors -->
-  <script type="module">
-    // Import Supabase properly for GitHub Pages
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  <!-- Supabase UMD build (most reliable on GitHub Pages) -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" crossorigin="anonymous"></script>
 
-    // ---- CONFIG (your live values) ----
+  <script>
+    // ---- CONFIG: insert your real values ----
     const SUPABASE_URL = "https://aqkcztuwxvpsluarigke.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxa2N6dHV3eHZwc2x1YXJpZ2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxMTMwMjgsImV4cCI6MjA3MzY4OTAyOH0.S_ZQtNvB6lIho4QoRVpDMhWn12GwJDgM1O2D16uaClY";
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Create client
+    if (!window.supabase) {
+      console.error("Supabase library failed to load.");
+    }
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ---- DOM ----
+    // DOM
     const form = document.getElementById('tutor-form');
     const statusEl = document.getElementById('status');
     const submitBtn = document.getElementById('submitBtn');
-
     const otherCertCheckbox = document.getElementById('cert_other');
     const otherCertContainer = document.getElementById('other_cert_container');
     const otherCertInput = document.getElementById('other_certifications');
 
+    // Toggle "Other certifications"
     if (otherCertCheckbox && otherCertContainer) {
       otherCertCheckbox.addEventListener('change', () => {
-        if (otherCertCheckbox.checked) {
-          otherCertContainer.classList.remove('hidden');
-        } else {
+        if (otherCertCheckbox.checked) otherCertContainer.classList.remove('hidden');
+        else {
           otherCertContainer.classList.add('hidden');
           if (otherCertInput) otherCertInput.value = '';
         }
       });
     }
 
-    function setStatus(message, ok = false) {
-      statusEl.textContent = message;
+    function setStatus(msg, ok=false) {
+      statusEl.textContent = msg;
       statusEl.className = 'text-sm ' + (ok ? 'text-green-400' : 'text-red-400');
     }
 
-    function collectCertifications() {
+    function collectCerts() {
       const certs = [];
       if (document.getElementById('cert_oga')?.checked)  certs.push('The Academy of Orton-Gillingham (OGA)');
       if (document.getElementById('cert_ida')?.checked)  certs.push('International Dyslexia Association (IDA)');
@@ -201,13 +203,13 @@
         city: document.getElementById('city').value.trim() || null,
         region: document.getElementById('region').value.trim() || null,
         country: document.getElementById('country').value.trim() || null,
-        certifications: collectCertifications(),
+        certifications: collectCerts(),
         services: document.getElementById('services').value.trim() || null,
         rate: document.getElementById('rate').value.trim() || null,
         virtual: document.getElementById('virtual').checked,
         in_person: document.getElementById('in_person').checked,
         website: document.getElementById('website').value.trim() || null,
-        facebook: document.getElementById('facebook').value.trim() || null, // column exists in your DB
+        facebook: document.getElementById('facebook').value.trim() || null,
         bio: document.getElementById('bio').value.trim() || null,
         consent: document.getElementById('consent').checked
       };
@@ -219,7 +221,7 @@
       }
 
       try {
-        console.log('[DEBUG] Insert payload:', payload);
+        console.log('[DEBUG] Inserting payload:', payload);
         const { data, error } = await supabase
           .from('tutors')
           .insert([payload])
@@ -227,7 +229,7 @@
 
         if (error) {
           console.error('[Supabase insert error]', error);
-          setStatus(`Error: ${error.message || 'Unable to save.'}`);
+          setStatus('Error: ' + (error.message || 'Unable to save.'));
         } else {
           console.log('[Supabase insert ok]', data);
           form.reset();
