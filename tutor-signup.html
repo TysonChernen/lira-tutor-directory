@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lira • Tutor Directory Sign‑Up</title>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html, body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+  </style>
+  <!-- Supabase JS -->
+  <script defer src="https://esm.sh/@supabase/supabase-js@2"></script>
+</head>
+<body class="min-h-screen bg-neutral-950 text-neutral-100">
+  <header class="border-b border-neutral-800">
+    <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="h-8 w-8 rounded-xl bg-yellow-400"></div>
+        <div class="text-xl font-semibold tracking-tight">Lira Tutors</div>
+      </div>
+      <a href="#" class="text-sm text-neutral-300 hover:text-white">Back to Lira</a>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-10">
+    <div class="bg-neutral-900/60 border border-neutral-800 rounded-2xl shadow-xl">
+      <div class="p-6 sm:p-8">
+        <h1 class="text-2xl sm:text-3xl font-semibold">Join the Tutor Directory</h1>
+        <p class="mt-2 text-neutral-300">Get discovered by parents and schools. Free listing for Orton‑Gillingham and other structured‑literacy tutors.</p>
+
+        <form id="tutor-form" class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Contact -->
+          <div class="sm:col-span-1">
+            <label class="block text-sm mb-1" for="full_name">Full name *</label>
+            <input id="full_name" name="full_name" required class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+          </div>
+          <div class="sm:col-span-1">
+            <label class="block text-sm mb-1" for="email">Email *</label>
+            <input id="email" name="email" type="email" required class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+          </div>
+          <div class="sm:col-span-1">
+            <label class="block text-sm mb-1" for="phone">Phone</label>
+            <input id="phone" name="phone" class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+          </div>
+
+          <!-- Location -->
+          <div class="sm:col-span-1">
+            <label class="block text-sm mb-1" for="city">City</label>
+            <input id="city" name="city" class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+          </div>
+          <div class="sm:col-span-1">
+            <label class="block text-sm mb-1" for="region">Province / State</label>
+            <input id="region" name="region" class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+          </div>
+          <div class="sm:col-span-1">
+            <label class="block text-sm mb-1" for="country">Country</label>
+            <input id="country" name="country" class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2" placeholder="Canada or United States" />
+          </div>
+
+          <!-- Professional info -->
+          <div class="sm:col-span-2">
+            <label class="block text-sm mb-1">Certifications</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label class="inline-flex items-center gap-2">
+                <input id="cert_oga" type="checkbox" class="rounded border-neutral-700 bg-neutral-900" />
+                <span class="text-sm">The Academy of Orton-Gillingham (OGA)</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input id="cert_ida" type="checkbox" class="rounded border-neutral-700 bg-neutral-900" />
+                <span class="text-sm">International Dyslexia Association (IDA)</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input id="cert_alta" type="checkbox" class="rounded border-neutral-700 bg-neutral-900" />
+                <span class="text-sm">The Academic Language Therapy Association (ALTA)</span>
+              </label>
+              <label class="inline-flex items-center gap-2">
+                <input id="cert_other" type="checkbox" class="rounded border-neutral-700 bg-neutral-900" />
+                <span class="text-sm">Other</span>
+              </label>
+            </div>
+            <div id="other_cert_container" class="mt-3 hidden">
+              <input id="other_certifications" name="other_certifications" class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2" placeholder="Please specify other certifications" />
+            </div>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm mb-1" for="services">Services</label>
+            <input id="services" name="services" class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2" placeholder="1:1 tutoring, small groups, screening, parent coaching" />
+          </div>
+          <div class="sm:col-span-1">
+            <label class="block text-sm mb-1" for="rate">Rate (optional)</label>
+            <input id="rate" name="rate" class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2" placeholder="$60–$120/hr" />
+          </div>
+
+          <div class="flex items-center gap-3 sm:col-span-1">
+            <label class="inline-flex items-center gap-2">
+              <input id="virtual" type="checkbox" class="rounded border-neutral-700 bg-neutral-900" />
+              <span class="text-sm">Virtual</span>
+            </label>
+            <label class="inline-flex items-center gap-2">
+              <input id="in_person" type="checkbox" class="rounded border-neutral-700 bg-neutral-900" />
+              <span class="text-sm">In‑person</span>
+            </label>
+          </div>
+
+          <div class="sm:col-span-1">
+            <label class="block text-sm mb-1" for="website">Website</label>
+            <input id="website" name="website" class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2" placeholder="https://…" />
+          </div>
+          <div class="sm:col-span-1">
+            <label class="block text-sm mb-1" for="facebook">Facebook (optional)</label>
+            <input id="facebook" name="facebook" class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2" placeholder="@handle" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-sm mb-1" for="bio">Short bio</label>
+            <textarea id="bio" name="bio" rows="4" class="w-full rounded-xl bg-neutral-950 border border-neutral-800 px-3 py-2" placeholder="Your approach, experience, availability…"></textarea>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="inline-flex items-start gap-3">
+              <input id="consent" type="checkbox" class="mt-1 rounded border-neutral-700 bg-neutral-900" required />
+              <span class="text-sm text-neutral-300">I consent to being listed in the public Lira Tutor Directory and to be contacted by parents/guardians.</span>
+            </label>
+          </div>
+
+          <div class="sm:col-span-2 flex items-center gap-3 mt-2">
+            <button id="submitBtn" type="submit" class="inline-flex items-center justify-center rounded-xl bg-yellow-400 text-neutral-950 font-semibold px-4 py-2 hover:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed">
+              Submit
+            </button>
+            <span id="status" class="text-sm text-neutral-300"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <p class="mt-6 text-xs text-neutral-400">This page is independent from the main app. You can embed or link it later.</p>
+  </main>
+
+  <script>
+    // Handle "Other" certifications checkbox - this runs immediately
+    document.addEventListener('DOMContentLoaded', function() {
+      const otherCertCheckbox = document.getElementById('cert_other');
+      const otherCertContainer = document.getElementById('other_cert_container');
+      
+      if (otherCertCheckbox && otherCertContainer) {
+        otherCertCheckbox.addEventListener('change', function() {
+          if (this.checked) {
+            otherCertContainer.classList.remove('hidden');
+          } else {
+            otherCertContainer.classList.add('hidden');
+            document.getElementById('other_certifications').value = '';
+          }
+        });
+      }
+    });
+  </script>
+
+  <script type="module">
+    // === 1) Configure Supabase (replace with your project values) ===
+    const SUPABASE_URL = "https://aqkcztuwxvpsluarigke.supabase.co";      // <-- change me
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxa2N6dHV3eHZwc2x1YXJpZ2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxMTMwMjgsImV4cCI6MjA3MzY4OTAyOH0.S_ZQtNvB6lIho4QoRVpDMhWn12GwJDgM1O2D16uaClY";                  // <-- change me
+
+    if (!SUPABASE_URL.startsWith("https://") || SUPABASE_ANON_KEY.includes("YOUR-")) {
+      console.warn("⚠️ Remember to set SUPABASE_URL and SUPABASE_ANON_KEY.");
+    }
+
+    const { createClient } = window['@supabase/supabase-js'];
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // === 2) Handle submit ===
+    const form = document.getElementById('tutor-form');
+    const statusEl = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusEl.textContent = '';
+
+      // Collect certifications from checkboxes
+      const certifications = [];
+      if (document.getElementById('cert_oga').checked) certifications.push('The Academy of Orton-Gillingham (OGA)');
+      if (document.getElementById('cert_ida').checked) certifications.push('International Dyslexia Association (IDA)');
+      if (document.getElementById('cert_alta').checked) certifications.push('The Academic Language Therapy Association (ALTA)');
+      if (document.getElementById('cert_other').checked) {
+        const otherCerts = document.getElementById('other_certifications').value.trim();
+        if (otherCerts) certifications.push(otherCerts);
+      }
+
+      const data = {
+        full_name: document.getElementById('full_name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim() || null,
+        city: document.getElementById('city').value.trim() || null,
+        region: document.getElementById('region').value.trim() || null,
+        country: document.getElementById('country').value.trim() || null,
+        certifications: certifications.length > 0 ? certifications.join(', ') : null,
+        services: document.getElementById('services').value.trim() || null,
+        rate: document.getElementById('rate').value.trim() || null,
+        virtual: document.getElementById('virtual').checked,
+        in_person: document.getElementById('in_person').checked,
+        website: document.getElementById('website').value.trim() || null,
+        facebook: document.getElementById('facebook').value.trim() || null,
+        bio: document.getElementById('bio').value.trim() || null,
+        consent: document.getElementById('consent').checked
+      };
+
+      // basic validation
+      if (!data.full_name || !data.email || !data.consent) {
+        statusEl.textContent = 'Please fill required fields.';
+        statusEl.className = 'text-sm text-red-400';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+
+      const { error } = await supabase.from('tutors').insert(data);
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit';
+
+      if (error) {
+        console.error(error);
+        statusEl.textContent = 'Error: ' + (error.message || 'Unable to save.');
+        statusEl.className = 'text-sm text-red-400';
+      } else {
+        form.reset();
+        statusEl.textContent = 'Thanks! Your profile was submitted.';
+        statusEl.className = 'text-sm text-green-400';
+      }
+    });
+  </script>
+</body>
+</html>
